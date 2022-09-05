@@ -23,9 +23,14 @@ namespace Application.Features.ProgrammingLanguages.Rules
         {
             IPaginate<ProgrammingLanguage> result = await _programmingLanguageRepository.GetListAsync(b => b.Name == name);
             if (result.Items.Any()) throw new BusinessException("ProgrammingLanguage name exists.");
-            //bunu yaptım ama olmadı...
-            //IPaginate<ProgrammingLanguage> result = await _programmingLanguageRepository
-            //if (result.Items==null) throw new BusinessException("ProgrammingLanguage name is empty.");
+            
+        }
+
+        public async Task ProgrammingLanguageShouldExistWhenRequested(ProgrammingLanguage programmingLanguage)
+        {
+
+            if (programmingLanguage == null) throw new BusinessException("Requested ProgrammingLanguage Id exists.");
+
         }
     }
 }

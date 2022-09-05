@@ -1,5 +1,9 @@
 ﻿using Application.Features.ProgrammingLanguages.Commands.CreateProgrammingLanguage;
 using Application.Features.ProgrammingLanguages.Dtos;
+using Application.Features.ProgrammingLanguages.Models;
+using Application.Features.ProgrammingLanguages.Queries.GetByIdProgrammingLanguage;
+using Application.Features.ProgrammingLanguages.Queries.GetListProgrammingLanguage;
+using Core.Application.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,5 +19,30 @@ namespace WebAPI.Controllers
             CreatedProgrammingLanguageDto result = await Mediator.Send(createProgrammingLanguageCommand);
             return Created("", result);
         }
-    }
+
+        [HttpGet]
+        public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest )
+        {
+            //GetListProgrammingLanguageQuery getListProgrammingLanguageQuery= new GetListProgrammingLanguageQuery();
+            GetListProgrammingLanguageQuery getListProgrammingLanguageQuery = new() { PageRequest = pageRequest };
+            //yeni kullanım GetListProgrammingLanguageQuery getListProgrammingLanguageQuery = new() { PageRequest = pageRequest }
+            ProgrammingLanguageListModel result = await Mediator.Send(getListProgrammingLanguageQuery);
+            return Ok(result);
+        }
+
+        [HttpGet("{Id}") ]
+        public async Task<IActionResult> GetById([FromRoute] GetByIdProgrammingLanguageQuery getByIdProgrammingLanguageQuery)
+        {
+            ProgrammingLanguageGetByIdDto programmingLanguageGetByIdDto = await Mediator.Send(getByIdProgrammingLanguageQuery);
+            return Ok(programmingLanguageGetByIdDto);
+
+        }
+
+
+        }
 }
+
+
+
+
+
