@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\ProgrammingLanguages\Constants\" />
+    <ProjectReference Include="..\..\corePackages\Core.Application\Core.Application.csproj" />
+    <ProjectReference Include="..\..\corePackages\Core.CrossCuttingConcers\Core.CrossCuttingConcerns.csproj" />
+    <ProjectReference Include="..\..\corePackages\Core.Persistence\Core.Persistence.csproj" />
+    <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,10 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\corePackages\Core.Application\Core.Application.csproj" />
-    <ProjectReference Include="..\..\corePackages\Core.CrossCuttingConcers\Core.CrossCuttingConcerns.csproj" />
-    <ProjectReference Include="..\..\corePackages\Core.Persistence\Core.Persistence.csproj" />
-    <ProjectReference Include="..\Domain\Domain.csproj" />
+    <Folder Include="Features\Auths\Models\" />
+    <Folder Include="Features\UserGithubs\Models\" />
+    <Folder Include="Features\UserGithubs\Queries\" />
+    <Folder Include="Features\UserOperationClaims\Commands\" />
+    <Folder Include="Features\UserOperationClaims\Dtos\" />
+    <Folder Include="Features\Users\Commands\" />
   </ItemGroup>
 
 </Project>

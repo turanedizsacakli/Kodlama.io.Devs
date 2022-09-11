@@ -1,9 +1,11 @@
 ﻿using Application.Features.ProgrammingLanguages.Commands.CreateProgrammingLanguage;
-using Application.Features.ProgrammingLanguages.Dtos;
-using Application.Features.ProgrammingLanguages.Models;
-using Application.Features.ProgrammingLanguages.Queries.GetByIdProgrammingLanguage;
-using Application.Features.ProgrammingLanguages.Queries.GetListProgrammingLanguage;
+using Application.Features.ProgrammingLanguages.Commands.DeleteProgrammingLanguage;
+using Application.Features.ProgrammingLanguages.Commands.UpdateProgrammingLanguage;
+using Application.Features.ProgrammingLanguages.Queries.ProgrammingLanguages.GetByIdProgrammingLanguage;
+using Application.Features.ProgrammingLanguages.Queries.ProgrammingLanguages.GetListByDynamicProgrammingLanguage;
+using Application.Features.ProgrammingLanguages.Queries.ProgrammingLanguages.GetListProgrammingLanguage;
 using Core.Application.Requests;
+using Core.Persistence.Dynamic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,38 +13,45 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProgrammingLanguageController : BaseController
+    public class ProgrammingLanguagesController : BaseController
     {
-        [HttpPost]
-        public async Task<IActionResult> Add([FromBody] CreateProgrammingLanguageCommand createProgrammingLanguageCommand)
+        [HttpPost("Add")]
+        public async Task<ActionResult> Add([FromBody] CreateProgrammingLanguageCommand createProgrammingLanguageCommand, CancellationToken cancellationToken)
         {
-            CreatedProgrammingLanguageDto result = await Mediator.Send(createProgrammingLanguageCommand);
-            return Created("", result);
+            var createdProgrammingLanguage = await Mediator.Send(createProgrammingLanguageCommand);
+            return Created("", createdProgrammingLanguage);
         }
+        [HttpPost("Delete/{Id}")]
 
-        [HttpGet]
-        public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest )
+        public async Task<ActionResult> Delete([FromRoute] DeleteProgrammingLanguageCommand deleteProgrammingLanguageCommand, CancellationToken cancellationToken)
         {
-            //GetListProgrammingLanguageQuery getListProgrammingLanguageQuery= new GetListProgrammingLanguageQuery();
-            GetListProgrammingLanguageQuery getListProgrammingLanguageQuery = new() { PageRequest = pageRequest };
-            //yeni kullanım GetListProgrammingLanguageQuery getListProgrammingLanguageQuery = new() { PageRequest = pageRequest }
-            ProgrammingLanguageListModel result = await Mediator.Send(getListProgrammingLanguageQuery);
+            var deletedProgrammingLanguage = await Mediator.Send(deleteProgrammingLanguageCommand);
+            return Ok(deletedProgrammingLanguage);
+        }
+        [HttpPost("Update")]
+        public async Task<ActionResult> Update([FromBody] UpdateProgammingLanguageCommand updateProgammingLanguageCommand, CancellationToken cancellationToken)
+        {
+            var updatedProgrammingLanguage = await Mediator.Send(updateProgammingLanguageCommand);
+            return Ok(updatedProgrammingLanguage);
+        }
+        [HttpGet("Get/GetAll")]
+        public async Task<ActionResult> GetAll([FromQuery] GetListProgrammingLanguageQuery getListProgrammingLanguageQuery, CancellationToken cancellationToken)
+        {
+            var result = await Mediator.Send(getListProgrammingLanguageQuery);
             return Ok(result);
         }
-
-        [HttpGet("{Id}") ]
-        public async Task<IActionResult> GetById([FromRoute] GetByIdProgrammingLanguageQuery getByIdProgrammingLanguageQuery)
+        [HttpGet("Get/GetById{Id}")]
+        public async Task<ActionResult> GetById([FromRoute] GetByIdProgrammingLanguageQuery getByIdProgrammingLanguageQuery, CancellationToken cancellationToken)
         {
-            ProgrammingLanguageGetByIdDto programmingLanguageGetByIdDto = await Mediator.Send(getByIdProgrammingLanguageQuery);
-            return Ok(programmingLanguageGetByIdDto);
-
+            var result = await Mediator.Send(getByIdProgrammingLanguageQuery);
+            return Ok(result);
         }
-
-
+        [HttpPost("Get/GetByDynamic")]
+        public async Task<ActionResult> GetByDynamic([FromQuery] PageRequest pageRequest, [FromBody] Dynamic dynamic, CancellationToken cancellationToken)
+        {
+            GetListByDynamicProgrammingLanguageQuery getListByDynamicProgrammingLanguageQuery = new GetListByDynamicProgrammingLanguageQuery { Dynamic = dynamic, PageRequest = pageRequest };
+            var result = await Mediator.Send(getListByDynamicProgrammingLanguageQuery);
+            return Ok(result);
         }
+    }
 }
-
-
-
-
-

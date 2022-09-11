@@ -1,4 +1,5 @@
-﻿using Application.Services.Repositories;
+﻿using Application.Features.ProgrammingLanguages.Constants;
+using Application.Services.Repositories;
 using Core.CrossCuttingConcerns.Exceptions;
 using Core.Persistence.Paging;
 using Domain.Entities;
@@ -14,23 +15,26 @@ namespace Application.Features.ProgrammingLanguages.Rules
     {
         private readonly IProgrammingLanguageRepository _programmingLanguageRepository;
 
-        public ProgrammingLanguageBusinessRules(IProgrammingLanguageRepository ProgrammingLanguageRepository)
+        public ProgrammingLanguageBusinessRules(IProgrammingLanguageRepository programmingLanguageRepository)
         {
-            _programmingLanguageRepository = ProgrammingLanguageRepository;
+            _programmingLanguageRepository = programmingLanguageRepository;
         }
 
-        public async Task ProgrammingLanguageNameCanNotBeDuplicatedWhenInserted(string name)
+        public async Task CheckIfProgrammingLanguageAlreadyExistsOnTable(string name)
         {
-            IPaginate<ProgrammingLanguage> result = await _programmingLanguageRepository.GetListAsync(b => b.Name == name);
-            if (result.Items.Any()) throw new BusinessException("ProgrammingLanguage name exists.");
-            
+            IPaginate<ProgrammingLanguage> data = _programmingLanguageRepository.GetListAsync(programmingLanguage=>programmingLanguage.Name==name).Result;
+            if (data.Items.Any())
+            {
+                throw new BusinessException(BusinessRuleConstants.ProgrammingLanguageAlreadyExists);
+            }
         }
-
-        public async Task ProgrammingLanguageShouldExistWhenRequested(ProgrammingLanguage programmingLanguage)
+        public void ProgrammingLanguageShouldExistWhenRequested(ProgrammingLanguage programmingLanguage)
         {
-
-            if (programmingLanguage == null) throw new BusinessException("Requested ProgrammingLanguage Id exists.");
-
+            if (programmingLanguage == null) throw new BusinessException(BusinessRuleConstants.ProgrammingLanguageNotExists);
+        }
+        public void ProgrammingLanguageListShouldExistWhenRequested(IPaginate<ProgrammingLanguage> programmingLanguages)
+        {
+            if (programmingLanguages.Items == null) throw new BusinessException(BusinessRuleConstants.ProgrammingLanguageListNotExists);
         }
     }
 }

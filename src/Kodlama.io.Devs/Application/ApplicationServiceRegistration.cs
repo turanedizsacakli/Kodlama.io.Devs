@@ -1,4 +1,8 @@
-﻿using Application.Features.ProgrammingLanguages.Rules;
+﻿using Application.Features.Auths.Rules;
+using Application.Features.ProgrammingLanguages.Rules;
+using Application.Features.ProgrammingTechnologies.Rules;
+using Application.Features.UserGithubs.Rules;
+using Application.Features.Users.Rules;
 using Core.Application.Pipelines.Validation;
 using FluentValidation;
 using MediatR;
@@ -9,6 +13,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static Application.Features.Users.Queries.GetUserByEmailQuery;
 
 namespace Application
 {
@@ -21,7 +26,11 @@ namespace Application
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddScoped<ProgrammingLanguageBusinessRules>();
-
+            services.AddScoped<ProgrammingTechnologyBusinessRules>();
+            services.AddScoped<UserBusinessRules>();
+            services.AddScoped<UserGithubBusinessRules>();
+            services.AddScoped<AuthBusinessRules>();
+            services.AddScoped<GetUserByEmailQueryHandler>();
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>));

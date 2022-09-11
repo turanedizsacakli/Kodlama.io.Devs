@@ -12,32 +12,32 @@ using System.Threading.Tasks;
 
 namespace Application.Features.ProgrammingLanguages.Commands.CreateProgrammingLanguage
 {
-    public class CreateProgrammingLanguageCommand : IRequest<CreatedProgrammingLanguageDto>
+    public class CreateProgrammingLanguageCommand:IRequest<CreatedProgrammingLanguageDto>
     {
         public string Name { get; set; }
 
-
         public class CreateProgrammingLanguageCommandHandler : IRequestHandler<CreateProgrammingLanguageCommand, CreatedProgrammingLanguageDto>
         {
-            private readonly IProgrammingLanguageRepository _programmingLanguageRepository;
             private readonly IMapper _mapper;
+            private readonly IProgrammingLanguageRepository _programmingLanguageRepository;
             private readonly ProgrammingLanguageBusinessRules _programmingLanguageBusinessRules;
 
-            public CreateProgrammingLanguageCommandHandler(IProgrammingLanguageRepository programmingLanguageRepository, IMapper mapper, ProgrammingLanguageBusinessRules programmingLanguageBusinessRules)
+            public CreateProgrammingLanguageCommandHandler(IMapper mapper, IProgrammingLanguageRepository programmingLanguageRepository, ProgrammingLanguageBusinessRules programmingLanguageBusinessRules)
             {
-                _programmingLanguageRepository = programmingLanguageRepository;
                 _mapper = mapper;
+                _programmingLanguageRepository = programmingLanguageRepository;
                 _programmingLanguageBusinessRules = programmingLanguageBusinessRules;
             }
 
-           public async Task<CreatedProgrammingLanguageDto> Handle(CreateProgrammingLanguageCommand request, CancellationToken cancellationToken)
+            public async Task<CreatedProgrammingLanguageDto> Handle(CreateProgrammingLanguageCommand request, CancellationToken cancellationToken)
             {
-                await _programmingLanguageBusinessRules.ProgrammingLanguageNameCanNotBeDuplicatedWhenInserted(request.Name);
-
+                await _programmingLanguageBusinessRules.CheckIfProgrammingLanguageAlreadyExistsOnTable(request.Name);
                 ProgrammingLanguage mappedProgrammingLanguage = _mapper.Map<ProgrammingLanguage>(request);
-                ProgrammingLanguage createdProgrammingLanguage = await _programmingLanguageRepository.AddAsync(mappedProgrammingLanguage);
-                CreatedProgrammingLanguageDto CreatedProgrammingLanguageDto = _mapper.Map<CreatedProgrammingLanguageDto>(createdProgrammingLanguage);
-                return CreatedProgrammingLanguageDto;
+       
+
+                ProgrammingLanguage createdLanguage = await _programmingLanguageRepository.AddAsync(mappedProgrammingLanguage);
+                CreatedProgrammingLanguageDto createdProgrammingLanguageDto = _mapper.Map<CreatedProgrammingLanguageDto>(createdLanguage);
+                return createdProgrammingLanguageDto;
             }
         }
     }
