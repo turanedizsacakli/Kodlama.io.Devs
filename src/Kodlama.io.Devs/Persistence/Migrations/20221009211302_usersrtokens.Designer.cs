@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Contexts;
 
@@ -11,9 +12,10 @@ using Persistence.Contexts;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    partial class BaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221009211302_usersrtokens")]
+    partial class usersrtokens
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -206,67 +208,6 @@ namespace Persistence.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Domain.Entities.ProgrammingTechnology", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Description");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ImageUrl");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Name");
-
-                    b.Property<int>("ProgrammingLanguageId")
-                        .HasColumnType("int")
-                        .HasColumnName("ProgrammingLanguageId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProgrammingLanguageId");
-
-                    b.ToTable("ProgrammingTechnologies", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "",
-                            ImageUrl = "",
-                            Name = "ASP.NET",
-                            ProgrammingLanguageId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "",
-                            ImageUrl = "",
-                            Name = "Django",
-                            ProgrammingLanguageId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "",
-                            ImageUrl = "",
-                            Name = "React",
-                            ProgrammingLanguageId = 2
-                        });
-                });
-
             modelBuilder.Entity("Domain.Entities.UserGithub", b =>
                 {
                     b.Property<int>("Id")
@@ -318,17 +259,6 @@ namespace Persistence.Migrations
                     b.Navigation("OperationClaim");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Domain.Entities.ProgrammingTechnology", b =>
-                {
-                    b.HasOne("Domain.Entities.ProgrammingLanguage", "ProgrammingLanguage")
-                        .WithMany()
-                        .HasForeignKey("ProgrammingLanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProgrammingLanguage");
                 });
 
             modelBuilder.Entity("Core.Security.Entities.User", b =>

@@ -14,7 +14,13 @@ namespace Persistence.Contexts
     {
         protected IConfiguration Configuration { get; set; }
         public DbSet<ProgrammingLanguage> ProgrammingLanguages { get; set; }
-       
+        public DbSet<OperationClaim> OperationClaims { get; set; }
+        public DbSet<UserGithub> UserGithubs { get; set; }
+        public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<ProgrammingTechnology> ProgrammingTechnologies { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
 
         public BaseDbContext(DbContextOptions dbContextOptions, IConfiguration configuration) : base(dbContextOptions)
         {
@@ -35,16 +41,12 @@ namespace Persistence.Contexts
                 a.ToTable("ProgrammingLanguages").HasKey(k => k.Id);
                 a.Property(p => p.Id).HasColumnName("Id");
                 a.Property(p => p.Name).HasColumnName("Name");
-
-
             });
-
             modelBuilder.Entity<OperationClaim>(a =>
             {
                 a.ToTable("OperationClaims").HasKey(k => k.Id);
                 a.Property(p => p.Id).HasColumnName("Id");
                 a.Property(p => p.Name).HasColumnName("Name");
-
 
             });
             modelBuilder.Entity<UserGithub>(a =>
@@ -105,7 +107,7 @@ namespace Persistence.Contexts
             modelBuilder.Entity<OperationClaim>().HasData(operationClaimsSeed);
 
 
-            ProgrammingTechnology[] programmingTechnologiesSeed = { new(2, "ASP.NET", "", 1, ""), new(2, "Django", "", 1, ""), new(3, "React", "", 2, ""), };
+            ProgrammingTechnology[] programmingTechnologiesSeed = { new(1, "ASP.NET", "", 1, ""), new(2, "Django", "", 1, ""), new(3, "React", "", 2, ""), };
             modelBuilder.Entity<ProgrammingTechnology>().HasData(programmingTechnologiesSeed);
         }
     }
